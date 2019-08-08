@@ -36,10 +36,10 @@ class Pocketcasts(object):
             requests.response.models.Response: A response object
 
         """
+        print("Request "+ str(url))
         headers = None
         if self._apiToken != "":
             headers = {"Authorization": "Bearer "+self._apiToken}
-
 
         if method == 'JSON':
             req = requests.Request('POST', url, json=data, cookies=self._session.cookies, headers=headers)
@@ -78,7 +78,7 @@ class Pocketcasts(object):
         pcast = Podcast(pcast_json.pop('uuid'), self, **pcast_json)
         return pcast
 
-    def get_episode(self, episode_uuid, podcast=None):
+    def get_episode(self, episode_uuid):
         """Get all the Episode data
 
         Args:
@@ -96,9 +96,7 @@ class Pocketcasts(object):
         page = page_req.json()
         uuid = page.pop('uuid')
         pod_uuid = page.pop('podcastUuid')
-        if not podcast:
-            podcast = self.get_podcast(pod_uuid)
-        ep = Episode(uuid, podcast, **page)
+        ep = Episode(uuid, self, pod_uuid, **page)
         return ep
 
 
@@ -118,20 +116,13 @@ class Pocketcasts(object):
         page_req = self._make_req("https://api.pocketcasts.com/up_next/list", method="POST", data={"version":2})
         page = page_req.json()
         results = []
-        podcasts = {}
         for episode in page['episodes']:
             uuid = episode.pop('uuid')
             pod_uuid = episode.pop('podcast')
             if full_data:
-                podcast = None
-                if pod_uuid in podcasts:
-                    podcast = podcasts[pod_uuid]
-                ep = self.get_episode(uuid, podcast=podcast)
-                podcasts[pod_uuid] = ep.podcast
+                ep = self.get_episode(uuid)
             else:
-                if pod_uuid not in podcasts:
-                    podcasts[pod_uuid] = self.get_podcast(pod_uuid)
-                ep = Episode(uuid, podcasts[pod_uuid], **episode)
+                ep = Episode(uuid, self, pod_uuid, **episode)
             results.append(ep)
         return results
 
@@ -146,20 +137,13 @@ class Pocketcasts(object):
         """
         attempt = self._make_req('https://api.pocketcasts.com/user/new_releases', method='POST', data={})
         results = []
-        podcasts = {}
         for episode in attempt.json()['episodes']:
             pod_uuid = episode['podcastUuid']
             if full_data:
-                podcast = None
-                if pod_uuid in podcasts:
-                    podcast = podcasts[pod_uuid]
-                ep = self.get_episode(uuid, podcast=podcast)
-                podcasts[pod_uuid] = ep.podcast
+                ep = self.get_episode(uuid)
             else:
-                if pod_uuid not in podcasts:
-                    podcasts[pod_uuid] = self.get_podcast(pod_uuid)
                 uuid = episode.pop('uuid')
-                ep = Episode(uuid, podcasts[pod_uuid], **episode)
+                ep = Episode(uuid, self, pod_uuid, **episode)
             results.append(ep)
         return results
 
@@ -175,20 +159,13 @@ class Pocketcasts(object):
         """
         attempt = self._make_req('https://api.pocketcasts.com/user/in_progress', method='POST')
         results = []
-        podcasts = {}
         for episode in attempt.json()['episodes']:
             pod_uuid = episode['podcastUuid']
             if full_data:
-                podcast = None
-                if pod_uuid in podcasts:
-                    podcast = podcasts[pod_uuid]
-                ep = self.get_episode(uuid, podcast=podcast)
-                podcasts[pod_uuid] = ep.podcast
+                ep = self.get_episode(uuid)
             else:
-                if pod_uuid not in podcasts:
-                    podcasts[pod_uuid] = self.get_podcast(pod_uuid)
                 uuid = episode.pop('uuid')
-                ep = Episode(uuid, podcasts[pod_uuid], **episode)
+                ep = Episode(uuid, self, pod_uuid, **episode)
             results.append(ep)
         return results
 

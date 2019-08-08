@@ -8,16 +8,17 @@ class Episode(object):
         Playing = 2
         Played = 3
 
-    def __init__(self, uuid, podcast, **kwargs):
+    def __init__(self, uuid, api, podcast, **kwargs):
         """
 
         Args:
             uuid (str): Episode UUID
-            podcast (pocketcasts.Podcast): Podcast for the episode
+            api (pocetcast): Api object 
+            podcast (pocketcasts.Podcast|str): Podcast for the episode | uuid of the Podcast for the episode - Podcast object will be lazy loaded if needed
             **kwargs: Other information about episode
         """
         self._podcast = podcast
-        self._api = podcast.api
+        self._api = api
         self._uuid = uuid
         self._id = kwargs.get('id', '')
         self._is_deleted = kwargs.get('isDeleted', '')
@@ -43,6 +44,8 @@ class Episode(object):
     @property
     def podcast(self):
         """Get the podcast object for the episode"""
+        if is_instance(self._podcast,str):
+            self._podcast = self._api.get_podcast(self._podcast)
         return self._podcast
 
     @property
@@ -103,7 +106,7 @@ class Episode(object):
     @starred.setter
     def starred(self, starred):
         star = 1 if starred else 0
-        self._api.update_starred(self._podcast, self, star)
+        self._api.update_starred(self.podcast, self, star)
         self._starred = starred
 
     @property
@@ -113,9 +116,9 @@ class Episode(object):
 
     @playing_status.setter
     def playing_status(self, status):
-        self._api.update_playing_status(self._podcast, self, status)
+        self._api.update_playing_status(self.podcast, self, status)
         if status == self.PlayingStatus.Unplayed:
-            self._api.update_played_position(self._podcast, self, 0)
+            self._api.update_played_position(self.podcast, self, 0)
         self._playing_status = status
 
     @property
@@ -125,5 +128,5 @@ class Episode(object):
 
     @played_up_to.setter
     def played_up_to(self, position):
-        self._api.update_played_position(self._podcast, self, position)
+        self._api.update_played_position(self.podcast, self, position)
         self._played_up_to = position
