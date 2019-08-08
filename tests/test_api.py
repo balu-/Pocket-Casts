@@ -31,7 +31,7 @@ class PocketcastTest(unittest.TestCase):
     def test_get_new_releases(self):
         response = self.pocket.get_new_releases()
 
-     def test_get_new_releases_full(self):
+    def test_get_new_releases_full(self):
         response = self.pocket.get_new_releases(full_data=True)
 
     def test_get_in_progress(self):

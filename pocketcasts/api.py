@@ -138,10 +138,10 @@ class Pocketcasts(object):
         results = []
         for episode in attempt.json()['episodes']:
             pod_uuid = episode['podcastUuid']
+            uuid = episode.pop('uuid')
             if full_data:
                 ep = self.get_episode(uuid)
             else:
-                uuid = episode.pop('uuid')
                 ep = Episode(uuid, self, pod_uuid, **episode)
             results.append(ep)
         return results
@@ -160,10 +160,10 @@ class Pocketcasts(object):
         results = []
         for episode in attempt.json()['episodes']:
             pod_uuid = episode['podcastUuid']
+            uuid = episode.pop('uuid')
             if full_data:
                 ep = self.get_episode(uuid)
             else:
-                uuid = episode.pop('uuid')
                 ep = Episode(uuid, self, pod_uuid, **episode)
             results.append(ep)
         return results
