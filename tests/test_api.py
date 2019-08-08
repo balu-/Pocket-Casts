@@ -25,11 +25,23 @@ class PocketcastTest(unittest.TestCase):
     def test_get_up_next(self):
         response = self.pocket.get_up_next()
 
+    def test_get_up_next_full(self):
+        response = self.pocket.get_up_next(full_data=True)
+
     def test_get_new_releases(self):
         response = self.pocket.get_new_releases()
 
+     def test_get_new_releases_full(self):
+        response = self.pocket.get_new_releases(full_data=True)
+
     def test_get_in_progress(self):
         response = self.pocket.get_in_progress()
+        if len(response)>0:
+            p = response[0].podcast
+            self.assertTrue( p != None )
+
+    def test_get_in_progress_full(self):
+        response = self.pocket.get_in_progress(full_data=True)
         if len(response)>0:
             p = response[0].podcast
             self.assertTrue( p != None )
