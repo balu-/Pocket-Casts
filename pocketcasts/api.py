@@ -78,8 +78,35 @@ class Pocketcasts(object):
         pcast = Podcast(pcast_json.pop('uuid'), self, **pcast_json)
         return pcast
 
-    def get_up_next(self):
+    def get_episode(self, episode_uuid, podcast=None):
+        """Get all the Episode data
+
+        Args:
+            episode_uuid (str): uuid of the episode to be fetched
+            podcast (Podcast): (optional) podcast object if alreay availiable (will be fetched otherwise)
+
+        Returns:
+            Episode: A object of the type Episode with all the data in it
+
+        Raises:
+            Exception: If the episode might not be optained
+
+        """
+        page_req = self._make_req("https://api.pocketcasts.com/user/episode", method="POST",data={"uuid": episode_uuid})
+        page = page_req.json()
+        uuid = page.pop('uuid')
+        pod_uuid = page.pop('podcastUuid')
+        if not podcast:
+            podcast = self.get_podcast(pod_uuid)
+        ep = Episode(uuid, podcast, **page)
+        return ep
+
+
+    def get_up_next(self, full_data=False):
         """Get the podcast episodes that are in the list to be played
+
+        Args:
+            full_data (bool): if true the full dataset of each episode will be fetched otherwise only some attributes are deliverd
 
         Returns:
             list: A list of episodes as Episode objects
@@ -95,14 +122,24 @@ class Pocketcasts(object):
         for episode in page['episodes']:
             uuid = episode.pop('uuid')
             pod_uuid = episode.pop('podcast')
-            if pod_uuid not in podcasts:
-                podcasts[pod_uuid] = self.get_podcast(pod_uuid)
-            ep = Episode(uuid, podcasts[pod_uuid], **episode)
+            if full_data:
+                podcast = None
+                if pod_uuid in podcasts:
+                    podcast = podcasts[pod_uuid]
+                ep = self.get_episode(uuid, podcast=podcast)
+                podcasts[pod_uuid] = ep.podcast
+            else:
+                if pod_uuid not in podcasts:
+                    podcasts[pod_uuid] = self.get_podcast(pod_uuid)
+                ep = Episode(uuid, podcasts[pod_uuid], **episode)
             results.append(ep)
         return results
 
-    def get_new_releases(self):
+    def get_new_releases(self, full_data=False):
         """Get newly released podcasts from a user's subscriptions
+
+         Args:
+            full_data (bool): if true the full dataset of each episode will be fetched otherwise only some attributes are deliverd
 
         Returns:
             List[pocketcasts.episode.Episode]: A list of episodes
@@ -112,14 +149,25 @@ class Pocketcasts(object):
         podcasts = {}
         for episode in attempt.json()['episodes']:
             pod_uuid = episode['podcastUuid']
-            if pod_uuid not in podcasts:
-                podcasts[pod_uuid] = self.get_podcast(pod_uuid)
-            uuid = episode.pop('uuid')
-            results.append(Episode(uuid, podcasts[pod_uuid], **episode))
+            if full_data:
+                podcast = None
+                if pod_uuid in podcasts:
+                    podcast = podcasts[pod_uuid]
+                ep = self.get_episode(uuid, podcast=podcast)
+                podcasts[pod_uuid] = ep.podcast
+            else:
+                if pod_uuid not in podcasts:
+                    podcasts[pod_uuid] = self.get_podcast(pod_uuid)
+                uuid = episode.pop('uuid')
+                ep = Episode(uuid, podcasts[pod_uuid], **episode)
+            results.append(ep)
         return results
 
-    def get_in_progress(self):
+    def get_in_progress(self, full_data=False):
         """Get all in progress episodes
+
+         Args:
+            full_data (bool): if true the full dataset of each episode will be fetched otherwise only some attributes are deliverd
 
         Returns:
             List[pocketcasts.episode.Episode]: A list of episodes
@@ -130,10 +178,18 @@ class Pocketcasts(object):
         podcasts = {}
         for episode in attempt.json()['episodes']:
             pod_uuid = episode['podcastUuid']
-            if pod_uuid not in podcasts:
-                podcasts[pod_uuid] = self.get_podcast(pod_uuid)
-            uuid = episode.pop('uuid')
-            results.append(Episode(uuid, podcasts[pod_uuid], **episode))
+            if full_data:
+                podcast = None
+                if pod_uuid in podcasts:
+                    podcast = podcasts[pod_uuid]
+                ep = self.get_episode(uuid, podcast=podcast)
+                podcasts[pod_uuid] = ep.podcast
+            else:
+                if pod_uuid not in podcasts:
+                    podcasts[pod_uuid] = self.get_podcast(pod_uuid)
+                uuid = episode.pop('uuid')
+                ep = Episode(uuid, podcasts[pod_uuid], **episode)
+            results.append(ep)
         return results
 
 """    def update_playing_status(self, podcast, episode, status=Episode.PlayingStatus.Unplayed):

@@ -20,9 +20,9 @@ class Episode(object):
         self._api = podcast.api
         self._uuid = uuid
         self._id = kwargs.get('id', '')
-        self._is_deleted = kwargs.get('is_deleted', '')
-        self._is_video = bool(kwargs.get('is_video', ''))
-        self._file_type = kwargs.get('file_type', '')
+        self._is_deleted = kwargs.get('isDeleted', '')
+        self._is_video = bool(kwargs.get('isVideo', ''))
+        self._file_type = kwargs.get('fileType', '')
         self._size = kwargs.get('size', '')
 
         self._title = kwargs.get('title', '')
@@ -34,8 +34,8 @@ class Episode(object):
             self._published_at = ''
         self._starred = bool(kwargs.get('starred', False))
 
-        self._playing_status = kwargs.get('playing_status', Episode.PlayingStatus.Unplayed)
-        self._played_up_to = kwargs.get('played_up_to', '')
+        self._playing_status = kwargs.get('playingStatus', Episode.PlayingStatus.Unplayed)
+        self._played_up_to = kwargs.get('playedUpTo', '')
 
     def __repr__(self):
         return "%s (%r)" % (self.__class__, self.__dict__)
