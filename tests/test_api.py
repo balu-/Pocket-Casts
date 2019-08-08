@@ -17,6 +17,10 @@ class PocketcastTest(unittest.TestCase):
 
     def test_get_podcast(self):
         response = self.pocket.get_podcast('12012c20-0423-012e-f9a0-00163e1b201c')
+        # check title
+        t = response.title
+        self.assertTrue(isInstance(t,str))
+        self.assertTrue(t != "")
 
     def test_get_up_next(self):
         response = self.pocket.get_up_next()
