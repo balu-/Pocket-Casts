@@ -36,7 +36,6 @@ class Pocketcasts(object):
             requests.response.models.Response: A response object
 
         """
-        print("Request "+ str(url))
         headers = None
         if self._apiToken != "":
             headers = {"Authorization": "Bearer "+self._apiToken}
