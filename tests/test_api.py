@@ -19,7 +19,7 @@ class PocketcastTest(unittest.TestCase):
         response = self.pocket.get_podcast('12012c20-0423-012e-f9a0-00163e1b201c')
         # check title
         t = response.title
-        self.assertTrue(isInstance(t,str))
+        self.assertTrue(isinstance(t,str))
         self.assertTrue(t != "")
 
     def test_get_up_next(self):
@@ -30,6 +30,9 @@ class PocketcastTest(unittest.TestCase):
 
     def test_get_in_progress(self):
         response = self.pocket.get_in_progress()
+        if len(response)>0:
+            p = response[0].podcast
+            self.assertTrue( p != None )
 """
     def test_update_playing_status(self):
         pod = self.pocket.get_podcast("12012c20-0423-012e-f9a0-00163e1b201c")
