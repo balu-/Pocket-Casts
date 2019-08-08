@@ -28,8 +28,11 @@ class Episode(object):
         self._title = kwargs.get('title', '')
         self._url = kwargs.get('url', '')
         self._duration = kwargs.get('duration', '')
-        self._published_at = datetime.strptime(kwargs.get('published_at', ''), '%Y-%m-%d %H:%M:%S')
-        self._starred = bool(kwargs.get('starred', ''))
+        if kwargs.get('published', '') != '':
+            self._published_at = datetime.strptime(kwargs.get('published', ''), '%Y-%m-%dT%H:%M:%SZ')
+        else:
+            self._published_at = ''
+        self._starred = bool(kwargs.get('starred', False))
 
         self._playing_status = kwargs.get('playing_status', Episode.PlayingStatus.Unplayed)
         self._played_up_to = kwargs.get('played_up_to', '')
