@@ -5,11 +5,13 @@
 I made some methods work with the 'current' API, 
 removed the old ones, I might add them again if i need them
 
+[![Build Status](https://travis-ci.org/balu-/Pocket-Casts.svg?branch=master)](https://travis-ci.org/balu-/Pocket-Casts)
+[![Coverage Status](https://coveralls.io/repos/github/balu-/Pocket-Casts/badge.svg?branch=master)](https://coveralls.io/github/balu-/Pocket-Casts?branch=master)
+
 ---
 
 ## Old docu
 
-[![Build Status](https://travis-ci.org/balu-/Pocket-Casts.svg?branch=master)](https://travis-ci.org/balu-/Pocket-Casts)
 
 Unofficial Pocket Casts API written in Python 3.
 ## Installation
