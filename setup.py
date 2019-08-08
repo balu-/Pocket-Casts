@@ -11,7 +11,7 @@ setup(
     url=pocketcasts.api.__url__,
 
     author=pocketcasts.api.__author__,
-    author_email='ferguslongley@live.com',
+    #author_email='ferguslongley@live.com',
 
     license='MIT',
 
