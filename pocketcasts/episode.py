@@ -44,7 +44,7 @@ class Episode(object):
     @property
     def podcast(self):
         """Get the podcast object for the episode"""
-        if is_instance(self._podcast,str):
+        if isinstance(self._podcast,str):
             self._podcast = self._api.get_podcast(self._podcast)
         return self._podcast
 
