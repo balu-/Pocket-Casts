@@ -9,9 +9,7 @@ removed the old ones, I might add them again if i need them
 
 ## Old docu
 
-[![Build Status](https://travis-ci.org/exofudge/Pocket-Casts.svg?branch=master)](https://travis-ci.org/exofudge/Pocket-Casts)
-[![Coverage Status](https://coveralls.io/repos/github/exofudge/Pocket-Casts/badge.svg?branch=master)](https://coveralls.io/github/exofudge/Pocket-Casts?branch=master)
-[![Code Climate](https://codeclimate.com/github/exofudge/Pocket-Casts/badges/gpa.svg)](https://codeclimate.com/github/exofudge/Pocket-Casts)
+[![Build Status](https://travis-ci.org/balu-/Pocket-Casts.svg?branch=master)](https://travis-ci.org/balu-/Pocket-Casts)
 
 Unofficial Pocket Casts API written in Python 3.
 ## Installation
