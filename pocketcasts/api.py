@@ -3,7 +3,7 @@ import requests
 from .podcast import Podcast
 from .episode import Episode
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 __author__ = "balu-"
 __url__ = "https://github.com/balu-/Pocket-Casts"
 
