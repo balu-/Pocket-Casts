@@ -168,6 +168,28 @@ class Pocketcasts(object):
             results.append(ep)
         return results
 
+    def get_listening_history(self, full_data=False):
+        """Get listening History
+
+         Args:
+            full_data (bool): if true the full dataset of each episode will be fetched otherwise only some attributes are deliverd
+
+        Returns:
+            List[pocketcasts.episode.Episode]: A list of episodes
+
+        """
+        attempt = self._make_req('https://api.pocketcasts.com/user/history', method='POST')
+        results = []
+        for episode in attempt.json()['episodes']:
+            pod_uuid = episode['podcastUuid']
+            uuid = episode.pop('uuid')
+            if full_data:
+                ep = self.get_episode(uuid)
+            else:
+                ep = Episode(uuid, self, pod_uuid, **episode)
+            results.append(ep)
+        return results
+
 """    def update_playing_status(self, podcast, episode, status=Episode.PlayingStatus.Unplayed):
         ""Update the playing status of an episode
         
